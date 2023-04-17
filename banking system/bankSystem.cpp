@@ -151,20 +151,24 @@ int main()
 
 Account::Account(string fname, string lname, float balance)
 {
+    //initialize all the values
     this->firstName = fname;
     this->lastName = lname;
     this->balance = balance > MIN_BALANCE ? balance : MIN_BALANCE;
+    //set account number and update last account number
     accountNumber = NextAccountNumber + 1;
     setLastAccountNumber(accountNumber);
 }
 
 void Account::deposit(float amount)
 {
+    //increase balance of the account
     balance += amount;
 }
 
 void Account::withdraw(float amount)
 {
+    //check if account have enough money, if so , deduct, else, no action
     if(amount > balance)
     {
         cout << "You don't have enough money" << endl;
@@ -175,11 +179,12 @@ void Account::withdraw(float amount)
     }
 }
 
+//setter of the last account number
 void Account::setLastAccountNumber(long accountNumber)
 {
     NextAccountNumber = accountNumber;
 }
-
+//getter of the last account number
 long Account::getLastAccountNumber()
 {
     return NextAccountNumber;
@@ -194,7 +199,7 @@ ifstream & operator>>(ifstream &ifs, Account &acc)
 {
     return ifs;
 }
-
+//ostream used when cout items from Account class
 ostream & operator<<(ostream &os, Account &acc)
 {
     os << "Customer " << acc.accountNumber << endl 
@@ -205,6 +210,7 @@ ostream & operator<<(ostream &os, Account &acc)
 
 Account Bank::openAccount(string fname, string lname, float balance)
 {
+    //create temp account class item and add into the map using account number as unique key
     Account temp(fname, lname, balance);
     accounts[temp.getLastAccountNumber()] = temp;
     
@@ -213,6 +219,7 @@ Account Bank::openAccount(string fname, string lname, float balance)
 
 Account Bank::balanceEnquiry(long accountNumber)
 {
+    //search through map using unique account number as key
     Account temp = accounts[accountNumber];
 
     return temp;
@@ -244,12 +251,14 @@ Account Bank::withdraw(long accountNumber, float amount)
 
 void Bank::closeAccount(long accountNumber)
 {
+    //erase item in map using unique key
     accounts.erase(accountNumber);
 }
 
 void Bank::showAllAccounts()
 {
     cout << "Here's all the accounts in the bank system" << endl;
+    //loop through the map and display all the accounts information that is stored in the system
     for(auto item : accounts)
     {
         cout << "Customer " << item.first << endl
