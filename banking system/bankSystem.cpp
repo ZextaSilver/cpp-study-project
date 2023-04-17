@@ -115,16 +115,16 @@ int main()
                 cout << acc;
                 break;
 
-            // case 4:
-            //     cout << "Enter Account Number: " << endl;
-            //     cin >> accountNumber;
-            //     cout << "Enter Balance: ";
-            //     cin >> amount;
-            //     acc = b.withdraw(accountNumber, amount);
+            case 4:
+                cout << "Enter Account Number: " << endl;
+                cin >> accountNumber;
+                cout << "Enter Balance: ";
+                cin >> amount;
+                acc = b.withdraw(accountNumber, amount);
 
-            //     cout << endl << "Amount Withdrawn" << endl;
-            //     cout << acc;
-            //     break;
+                cout << endl << "Amount Withdrawn" << endl;
+                cout << acc;
+                break;
 
             // case 5:
             //     cout << "Enter Account Number: " << endl;
@@ -223,14 +223,17 @@ Account Bank::deposit(long accountNumber, float amount)
 {
     Account temp = accounts[accountNumber];
     temp.deposit(amount);
+    accounts[accountNumber] = temp;
 
     return temp;
 }
 
 Account Bank::withdraw(long accountNumber, float amount)
 {
-    Account temp;
-
+    Account temp = accounts[accountNumber];
+    temp.withdraw(amount);
+    accounts[accountNumber] = temp;
+    
     return temp;
 }
 
