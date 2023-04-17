@@ -75,7 +75,11 @@ int main()
             << "\t6. Show All Accounts\n"
             << "\t7. Quit\n"
             << "Enter your choice: ";
-        cin >> choice;
+        // do
+        // {
+            cin >> choice;
+        // } while (choice < 1 || choice > 7);
+        
         switch (choice)
         {
             case 1:
@@ -91,25 +95,25 @@ int main()
                 cout << acc;
                 break;
                 
-            // case 2:
-            //     cout << "Enter Account Number: " << endl;
-            //     cin >> accountNumber;
-            //     acc = b.balanceEnquiry(accountNumber);
+            case 2:
+                cout << "Enter Account Number: " << endl;
+                cin >> accountNumber;
+                acc = b.balanceEnquiry(accountNumber);
 
-            //     cout << endl << "Your Account Details" << endl;
-            //     cout << acc;
-            //     break;
+                cout << endl << "Your Account Details" << endl;
+                cout << acc;
+                break;
 
-            // case 3:
-            //     cout << "Enter Account Number: " << endl;
-            //     cin >> accountNumber;
-            //     cout << "Enter Balance: ";
-            //     cin >> amount;
-            //     acc = b.deposit(accountNumber, amount);
+            case 3:
+                cout << "Enter Account Number: " << endl;
+                cin >> accountNumber;
+                cout << "Enter Balance: ";
+                cin >> amount;
+                acc = b.deposit(accountNumber, amount);
 
-            //     cout << endl << "Amount is Deposited" << endl;
-            //     cout << acc;
-            //     break;
+                cout << endl << "Amount is Deposited" << endl;
+                cout << acc;
+                break;
 
             // case 4:
             //     cout << "Enter Account Number: " << endl;
@@ -131,9 +135,9 @@ int main()
             //     cout<< acc;
             //     break;
             
-            // case 6:
-            //     b.showAllAccounts();
-            //     break;
+            case 6:
+                b.showAllAccounts();
+                break;
 
             case 7:
                 exit(0);
@@ -194,8 +198,9 @@ ifstream & operator>>(ifstream &ifs, Account &acc)
 
 ostream & operator<<(ostream &os, Account &acc)
 {
-    os << "Customer " << acc.accountNumber << endl << acc.firstName << " " << acc.lastName << endl
-    << "Balance: " << acc.balance << endl << endl;
+    os << "Customer " << acc.accountNumber << endl 
+       << "Name: " << acc.firstName << " " << acc.lastName << endl
+       << "Balance: " << acc.balance << endl << endl;
     return os;
 }
 
@@ -209,14 +214,15 @@ Account Bank::openAccount(string fname, string lname, float balance)
 
 Account Bank::balanceEnquiry(long accountNumber)
 {
-    Account temp;
+    Account temp = accounts[accountNumber];
 
     return temp;
 }
 
 Account Bank::deposit(long accountNumber, float amount)
 {
-    Account temp;
+    Account temp = accounts[accountNumber];
+    temp.deposit(amount);
 
     return temp;
 }
@@ -235,5 +241,11 @@ void Bank::closeAccount(long accountNumber)
 
 void Bank::showAllAccounts()
 {
-
+    cout << "Here's all the accounts in the bank system" << endl;
+    for(auto item : accounts)
+    {
+        cout << "Customer " << item.first << endl
+             << "Name: " << item.second.getFirstName() << " " << item.second.getLastName() << endl
+             << "Balance: " << item.second.getBalance() << endl << endl;
+    }
 }
