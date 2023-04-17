@@ -126,14 +126,13 @@ int main()
                 cout << acc;
                 break;
 
-            // case 5:
-            //     cout << "Enter Account Number: " << endl;
-            //     cin >> accountNumber;
-            //     b.closeAccount(accountNumber);
+            case 5:
+                cout << "Enter Account Number: " << endl;
+                cin >> accountNumber;
+                b.closeAccount(accountNumber);
                 
-            //     cout << endl << "Account is Closed" << endl;
-            //     cout<< acc;
-            //     break;
+                cout << endl << "Account is Closed" << endl;
+                break;
             
             case 6:
                 b.showAllAccounts();
@@ -221,8 +220,11 @@ Account Bank::balanceEnquiry(long accountNumber)
 
 Account Bank::deposit(long accountNumber, float amount)
 {
+    //search for account in accounts map
     Account temp = accounts[accountNumber];
+    //complete action
     temp.deposit(amount);
+    //store the new values back into the map to update information
     accounts[accountNumber] = temp;
 
     return temp;
@@ -230,16 +232,19 @@ Account Bank::deposit(long accountNumber, float amount)
 
 Account Bank::withdraw(long accountNumber, float amount)
 {
+    //search for account in accounts map
     Account temp = accounts[accountNumber];
+    //complete action
     temp.withdraw(amount);
+    //store the new values back into the map to update information
     accounts[accountNumber] = temp;
-    
+
     return temp;
 }
 
 void Bank::closeAccount(long accountNumber)
 {
-
+    accounts.erase(accountNumber);
 }
 
 void Bank::showAllAccounts()
