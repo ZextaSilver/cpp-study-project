@@ -1,5 +1,6 @@
 #include<iostream>
 #include<map>
+#include<fstream>
 
 using namespace std;
 #define MIN_BALANCE 500
@@ -75,10 +76,8 @@ int main()
             << "\t6. Show All Accounts\n"
             << "\t7. Quit\n"
             << "Enter your choice: ";
-        // do
-        // {
-            cin >> choice;
-        // } while (choice < 1 || choice > 7);
+
+        cin >> choice;
         
         switch (choice)
         {
@@ -192,11 +191,19 @@ long Account::getLastAccountNumber()
 
 ofstream & operator<<(ofstream &ofs, Account &acc)
 {
+    ofs << acc.accountNumber << endl;
+    ofs << acc.firstName << endl;
+    ofs << acc.lastName << endl;
+    ofs << acc.balance << endl;
     return ofs;
 }
 
 ifstream & operator>>(ifstream &ifs, Account &acc)
 {
+    ifs >> acc.accountNumber;
+    ifs >> acc.firstName;
+    ifs >> acc.lastName;
+    ifs >> acc.balance;
     return ifs;
 }
 //ostream used when cout items from Account class
@@ -207,6 +214,11 @@ ostream & operator<<(ostream &os, Account &acc)
        << "Balance: " << acc.balance << endl << endl;
     return os;
 }
+
+// Bank::Bank()
+// {
+
+// }
 
 Account Bank::openAccount(string fname, string lname, float balance)
 {
