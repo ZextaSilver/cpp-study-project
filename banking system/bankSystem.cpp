@@ -215,10 +215,24 @@ ostream & operator<<(ostream &os, Account &acc)
     return os;
 }
 
-// Bank::Bank()
-// {
-
-// }
+Bank::Bank()
+{
+    Account account;
+    ifstream infile;
+    infile.open("Bank.data");
+    if(!infile)
+    {
+        cout << "Error in Opening, File Not Found" << endl;
+        return;
+    }
+    while(!infile.eof())
+    {
+        infile >> account;
+        accounts.insert(pair<long, Account>(account.getAccNo(), account));
+    }
+    Account::setLastAccountNumber(account.getAccNo());
+    infile.close();
+}
 
 Account Bank::openAccount(string fname, string lname, float balance)
 {
@@ -277,4 +291,17 @@ void Bank::showAllAccounts()
              << "Name: " << item.second.getFirstName() << " " << item.second.getLastName() << endl
              << "Balance: " << item.second.getBalance() << endl << endl;
     }
+}
+
+Bank::~Bank()
+{
+    ofstream outfile;
+    outfile.open("Bank.data", ios::trunc);
+
+    map<long, Account>::iterator itr;
+    for(itr = accounts.begin(); itr != accounts.end(); itr++)
+    {
+        outfile << itr->second;
+    }
+    outfile.close();
 }
