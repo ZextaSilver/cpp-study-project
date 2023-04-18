@@ -42,7 +42,7 @@ class Bank
     private:
         map<long, Account> accounts;
     public:
-        Bank(){}
+        Bank();
         Account openAccount(string fname, string lname, float balance);
         Account balanceEnquiry(long accountNumber);
         Account deposit(long accountNumber, float amount);
@@ -50,7 +50,7 @@ class Bank
         void closeAccount(long accountNumber);
         void showAllAccounts();
 
-        ~Bank(){}
+        ~Bank();
 };
 
 int main()
@@ -209,9 +209,9 @@ ifstream & operator>>(ifstream &ifs, Account &acc)
 //ostream used when cout items from Account class
 ostream & operator<<(ostream &os, Account &acc)
 {
-    os << "Customer " << acc.accountNumber << endl 
-       << "Name: " << acc.firstName << " " << acc.lastName << endl
-       << "Balance: " << acc.balance << endl << endl;
+    os << "Account Number: " << acc.getAccNo() << endl 
+       << "Name: " << acc.getFirstName() << " " << acc.getLastName() << endl
+       << "Balance: " << acc.getBalance() << endl << endl;
     return os;
 }
 
@@ -236,9 +236,20 @@ Bank::Bank()
 
 Account Bank::openAccount(string fname, string lname, float balance)
 {
+    ofstream outfile;
     //create temp account class item and add into the map using account number as unique key
     Account temp(fname, lname, balance);
-    accounts[temp.getLastAccountNumber()] = temp;
+    accounts.insert(pair<long, Account>(temp.getAccNo(), temp));
+
+    outfile.open("Bank.data", ios::trunc);
+
+    map<long, Account>::iterator itr;
+    for(itr = accounts.begin(); itr != accounts.end(); itr++)
+    {
+        outfile << itr->second;
+    }
+
+    outfile.close();
     
     return temp;
 }
@@ -246,37 +257,35 @@ Account Bank::openAccount(string fname, string lname, float balance)
 Account Bank::balanceEnquiry(long accountNumber)
 {
     //search through map using unique account number as key
-    Account temp = accounts[accountNumber];
+    map<long, Account>::iterator itr = accounts.find(accountNumber);
 
-    return temp;
+    return itr->second;
 }
 
 Account Bank::deposit(long accountNumber, float amount)
 {
     //search for account in accounts map
-    Account temp = accounts[accountNumber];
-    //complete action
-    temp.deposit(amount);
-    //store the new values back into the map to update information
-    accounts[accountNumber] = temp;
+    map<long, Account>::iterator itr = accounts.find(accountNumber);
 
-    return temp;
+    itr->second.deposit(amount);
+    
+    return itr->second;
 }
 
 Account Bank::withdraw(long accountNumber, float amount)
 {
     //search for account in accounts map
-    Account temp = accounts[accountNumber];
-    //complete action
-    temp.withdraw(amount);
-    //store the new values back into the map to update information
-    accounts[accountNumber] = temp;
+    map<long, Account>::iterator itr = accounts.find(accountNumber);
 
-    return temp;
+    itr->second.withdraw(amount);
+    
+    return itr->second;
 }
 
 void Bank::closeAccount(long accountNumber)
 {
+    map<long, Account>::iterator itr = accounts.find(accountNumber);
+    cout << "Account Deleted\n" << itr->second;
     //erase item in map using unique key
     accounts.erase(accountNumber);
 }
@@ -284,12 +293,11 @@ void Bank::closeAccount(long accountNumber)
 void Bank::showAllAccounts()
 {
     cout << "Here's all the accounts in the bank system" << endl;
-    //loop through the map and display all the accounts information that is stored in the system
-    for(auto item : accounts)
+    
+    map<long, Account>::iterator itr;
+    for(itr = accounts.begin(); itr != accounts.end(); itr++)
     {
-        cout << "Customer " << item.first << endl
-             << "Name: " << item.second.getFirstName() << " " << item.second.getLastName() << endl
-             << "Balance: " << item.second.getBalance() << endl << endl;
+        cout << itr->second << endl;
     }
 }
 
